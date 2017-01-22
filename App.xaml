@@ -1,0 +1,24 @@
+﻿<Application x:Class="net.codingpanda.app.fenestra.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Fenestra="clr-namespace:net.codingpanda.app.fenestra"
+             Startup="ApplicationStartup">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries></ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type Fenestra:FenestraViewModel}">
+                <Fenestra:FenestraView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type Fenestra:FenestraResizeSelectionViewModel}">
+                <Fenestra:FenestraResizeSelectionView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type Fenestra:FenestraSettingsViewModel}">
+                <Fenestra:FenestraSettingsView />
+            </DataTemplate>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
+ 
