@@ -75,7 +75,16 @@ namespace net.codingpanda.app.fenestra.utils {
     [DllImport("user32.dll", EntryPoint="SetWindowPos")]
     public static extern IntPtr SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int x, int y, int cx, int cy, int wFlags);
 
+    private enum ShowWindowCommands {
+      SW_RESTORE=9,
+    }
+
+    [DllImport("user32.dll")]
+    [return : MarshalAs(UnmanagedType.Bool)]
+    private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
     public static void ResizeGlobalWindow(IntPtr handle, int left, int top, int width, int height) {
+      ShowWindow(handle, (int)ShowWindowCommands.SW_RESTORE);
       SetWindowPos(handle, 0, left, top, width, height, (int)(WindowFlags.NoZOrder));
     }
 
