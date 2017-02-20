@@ -1,0 +1,116 @@
+﻿<UserControl x:Class="net.codingpanda.app.fenestra.FenestraResizeSelectionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:Fenestra="clr-namespace:net.codingpanda.app.fenestra"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Fenestra:FenestraResizeSelectionViewModel}"
+             Background="#99666666"
+             Width="384"
+             Height="384">
+    <UserControl.Resources>
+        <ResourceDictionary Source="FenestraResourceDictionary.xaml" />
+    </UserControl.Resources>
+    <Border BorderBrush="#eeeeee"
+            BorderThickness="2"
+            CornerRadius="2">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <TextBlock HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Text="Fenestra" />
+                <Button HorizontalAlignment="Right"
+                        Margin="5"
+                        Height="24"
+                        Width="24"
+                        Content="X"
+                        Command="{Binding CloseCommand}" />
+            </Grid>
+
+            <StackPanel Grid.Row="1"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                <Image VerticalAlignment="Top"
+                       MaxHeight="16"
+                       MaxWidth="16"
+                       Margin="4"
+                       Source="{Binding ForegroundWindowIcon}" />
+                <TextBlock Text="{Binding ForegroundWindowHeader}"
+                           MaxWidth="360"
+                           TextWrapping="Wrap"
+                           VerticalAlignment="Center" />
+            </StackPanel>
+
+            <Grid x:Name="selectionGrid"
+                  Grid.Row="2"
+                  Margin="20"
+                  MouseDown="GridMouseDown"
+                  MouseUp="GridMouseUp"
+                  MouseMove="GridMouseMove">
+                <ItemsControl x:Name="selectionItemsControl"
+                              Background="Transparent"
+                              ItemsSource="{Binding Rows}"
+                              HorizontalAlignment="Stretch"
+                              VerticalAlignment="Stretch">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="1" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <ItemsControl ItemsSource="{Binding Cells}"
+                                          HorizontalAlignment="Stretch">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Rows="1" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border x:Name="selectionCell"
+                                                HorizontalAlignment="Stretch"
+                                                VerticalAlignment="Stretch"
+                                                CornerRadius="2"
+                                                BorderThickness="2"
+                                                BorderBrush="#eeeeee"
+                                                Margin="1">
+                                            <Border.Style>
+                                                <Style TargetType="{x:Type Border}">
+                                                    <Setter Property="Background"
+                                                            Value="Transparent" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Selected}"
+                                                                     Value="True">
+                                                            <Setter Property="Background"
+                                                                    Value="#aa2299ff" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <Canvas>
+                    <Rectangle x:Name="selectionBox"
+                               Visibility="Collapsed"
+                               Stroke="#ff1133ff"
+                               StrokeThickness="2"
+                               Fill="#662299ff" />
+                </Canvas>
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>
