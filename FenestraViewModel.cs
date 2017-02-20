@@ -42,6 +42,9 @@ namespace net.codingpanda.app.fenestra {
       GlobalHotkeyUtil.OnHotkeyPressed+=() => {
         WindowManager.CloseAllSelectionWindows();
         var newForegroundWindowHandle=ForegroundWindowUtil.GetForegroundWindowHandle();
+        if(ForegroundWindowUtil.IsHandleOwnedByFenestraProcess(fenestraProcessId, newForegroundWindowHandle)) {
+          return;
+        }
         foreach(var screen in Screen.AllScreens) {
           var vm=new FenestraResizeSelectionViewModel(screen, WindowManager);
           vm.LoadForegroundWindowInfo(newForegroundWindowHandle);
