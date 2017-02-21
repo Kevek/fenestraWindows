@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using net.codingpanda.app.fenestra.utils;
 using net.codingpanda.app.fenestra.wpf;
+using Point = System.Drawing.Point;
 
 
 namespace net.codingpanda.app.fenestra {
@@ -85,28 +86,32 @@ namespace net.codingpanda.app.fenestra {
       var rowCount=Rows.Count;
       var columnCount=Rows.First()?.Cells.Count ?? 0;
 
-      Tuple<double, double> newStartPos=null;
-      Tuple<double, double> newEndPos=null;
+      Point? newStartPos=null;
+      Point? newEndPos=null;
       for(var i=0; i<rowCount; i++) {
         for(var j=0; j<columnCount; j++) {
           var cell=Rows[i].Cells[j];
           if(cell.Selected) {
-            if(newStartPos==null) {
-              newStartPos=Tuple.Create(((double)Screen.WorkingArea.Width)*j/columnCount,
-                (double)Screen.WorkingArea.Height*i/rowCount);
+            if(newStartPos==null) { 
+              newStartPos=new Point(
+                (Screen.WorkingArea.Width)*j/columnCount,
+                Screen.WorkingArea.Height*i/rowCount);
             }
-            newEndPos=Tuple.Create((double)Screen.WorkingArea.Width*(j+1)/columnCount,
-              (double)Screen.WorkingArea.Height*(i+1)/rowCount);
+            newEndPos=new Point(
+              Screen.WorkingArea.Width*(j+1)/columnCount,
+              Screen.WorkingArea.Height*(i+1)/rowCount);
           }
         }
       }
-      if(newStartPos!=null) {
-        var width=newEndPos.Item1-newStartPos.Item1;
-        var height=newEndPos.Item2-newStartPos.Item2;
+      if(newStartPos.HasValue) {
+        var width=newEndPos.Value.X-newStartPos.Value.X;
+        var height=newEndPos.Value.Y-newStartPos.Value.Y;
+        var screenX=Screen.Bounds.X+newStartPos.Value.X;
+        var screenY=Screen.Bounds.Y+newStartPos.Value.Y;
         ForegroundWindowUtil.ResizeGlobalWindow(
           ForegroundHandle,
-          (int)newStartPos.Item1, (int)newStartPos.Item2,
-          (int)width, (int)height);
+          screenX, screenY,
+          width, height);
       }
 
       WindowManager.CloseAllSelectionWindows();
