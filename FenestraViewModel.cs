@@ -51,6 +51,9 @@ namespace net.codingpanda.app.fenestra {
           WindowManager.CreateCenteredWindow(vm, screen);
         }
       };
+      GlobalHotkeyUtil.OnEscapePressed+=() => {
+        WindowManager.CloseAllSelectionWindows();
+      };
 
       windowEventInfo=ForegroundWindowUtil.AddHookToForegroundWindowEvent(() => {
         var newForegroundWindowHandle=ForegroundWindowUtil.GetForegroundWindowHandle();

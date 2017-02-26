@@ -15,8 +15,11 @@ namespace net.codingpanda.app.fenestra.utils {
     private static extern bool UnregisterHotKey([In] IntPtr hWnd, [In] int id);
 
     private static HwndSource HwndSource;
+    private const int WmHotkey=0x0312;
     private const int HotkeyId=9000;
+    private const int EscapeHotkeyId=9001;
     public static event Action OnHotkeyPressed;
+    public static event Action OnEscapePressed;
 
     public static void SetupHotkey(Window parentWindow, FenestraSettingsHotKeys keys) {
       // Get hWnd (or create if window hasn't been shown)
@@ -55,23 +58,26 @@ namespace net.codingpanda.app.fenestra.utils {
         }
       }
 
-      if(!RegisterHotKey(hWnd, HotkeyId, modifierKeyInt, (uint)KeyInterop.VirtualKeyFromKey(hotKey))) {
-        // TODO: handle error
-      }
+      RegisterHotKey(hWnd, HotkeyId, modifierKeyInt, (uint)KeyInterop.VirtualKeyFromKey(hotKey));
+      RegisterHotKey(hWnd, EscapeHotkeyId, 0, (uint)KeyInterop.VirtualKeyFromKey(Key.Escape));
     }
 
     private static void UnregisterHotKey(Window parentWindow) {
       var helper=new WindowInteropHelper(parentWindow);
       UnregisterHotKey(helper.Handle, HotkeyId);
+      UnregisterHotKey(helper.Handle, EscapeHotkeyId);
     }
 
     private static IntPtr HwndHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled) {
-      const int wmHotkey=0x0312;
       switch(msg) {
-        case wmHotkey:
+        case WmHotkey:
           switch(wParam.ToInt32()) {
             case HotkeyId:
               OnHotkeyPressed?.Invoke();
+              handled=true;
+              break;
+            case EscapeHotkeyId:
+              OnEscapePressed?.Invoke();
               handled=true;
               break;
           }

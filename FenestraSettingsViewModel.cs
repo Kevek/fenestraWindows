@@ -62,7 +62,7 @@ namespace net.codingpanda.app.fenestra {
       HotKeys.CollectionChanged+=(s, e) => {
         var keys=new List<Key>();
         foreach(Key key in Enum.GetValues(typeof(Key))) {
-          if(HotKeys.Contains(key)) {
+          if(HotKeys.Contains(key) && key!=Key.Escape) {
             keys.Add(key);
           }
         }
