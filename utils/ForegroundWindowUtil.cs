@@ -58,8 +58,10 @@ namespace net.codingpanda.app.fenestra.utils {
         if(handle1==IntPtr.Zero) {
           handle1=LoadIcon(IntPtr.Zero, (IntPtr)0x7F00);
         }
-        return handle1!=IntPtr.Zero ? new Bitmap(Icon.FromHandle(handle1).ToBitmap(), 16, 16) : null;
-      } catch(Exception) {
+        return handle1!=IntPtr.Zero
+          ? new Bitmap(Icon.FromHandle(handle1).ToBitmap(), 16, 16)
+          : null;
+      } catch {
         return null;
       }
     }

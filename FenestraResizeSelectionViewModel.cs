@@ -64,11 +64,16 @@ namespace net.codingpanda.app.fenestra {
 
     public void LoadForegroundWindowInfo(IntPtr newForegroundHandle) {
       ForegroundHandle=newForegroundHandle;
-      ForegroundWindowHeader=ForegroundWindowUtil.GetForegroundWindowHeader(ForegroundHandle);
-      var iconBitmap=new Bitmap(ForegroundWindowUtil.GetForegroundWindowIcon(ForegroundHandle));
-      ForegroundWindowIcon=System.Windows.Interop.Imaging
-        .CreateBitmapSourceFromHBitmap(iconBitmap.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty,
-          BitmapSizeOptions.FromEmptyOptions());
+      ForegroundWindowHeader=ForegroundWindowUtil.GetForegroundWindowHeader(ForegroundHandle) ??
+                             "Fenestra unable to load window name";
+      var windowIconImage=ForegroundWindowUtil.GetForegroundWindowIcon(ForegroundHandle);
+      if(windowIconImage!=null) {
+        var iconBitmap=new Bitmap(windowIconImage);
+        ForegroundWindowIcon=System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+          iconBitmap.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+      } else {
+        ForegroundWindowIcon=new BitmapImage(new Uri("resources/unknown_icon.png", UriKind.Relative));
+      }
     }
 
     private void InitGrid() {
