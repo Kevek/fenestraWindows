@@ -93,25 +93,30 @@ namespace net.codingpanda.app.fenestra {
 
       Point? newStartPos=null;
       Point? newEndPos=null;
+      var screenRect=Screen.WorkingArea;
       for(var i=0; i<rowCount; i++) {
         for(var j=0; j<columnCount; j++) {
           var cell=Rows[i].Cells[j];
           if(cell.Selected) {
-            if(newStartPos==null) { 
+            if(newStartPos==null) {
               newStartPos=new Point(
-                (Screen.WorkingArea.Width)*j/columnCount,
-                Screen.WorkingArea.Height*i/rowCount);
+                screenRect.Width*j/columnCount,
+                screenRect.Height*i/rowCount);
             }
             newEndPos=new Point(
-              Screen.WorkingArea.Width*(j+1)/columnCount,
-              Screen.WorkingArea.Height*(i+1)/rowCount);
+              screenRect.Width*(j+1)/columnCount,
+              screenRect.Height*(i+1)/rowCount);
           }
         }
       }
+      var hasHiddenBorder=ForegroundWindowUtil.GetHiddenBorder(ForegroundHandle);
+      var hiddenBorder=hasHiddenBorder
+        ? 7
+        : 0;
       if(newStartPos.HasValue) {
-        var width=newEndPos.Value.X-newStartPos.Value.X;
-        var height=newEndPos.Value.Y-newStartPos.Value.Y;
-        var screenX=Screen.Bounds.X+newStartPos.Value.X;
+        var width=newEndPos.Value.X-newStartPos.Value.X+(2*hiddenBorder);
+        var height=newEndPos.Value.Y-newStartPos.Value.Y+hiddenBorder;
+        var screenX=Screen.Bounds.X+newStartPos.Value.X-hiddenBorder;
         var screenY=Screen.Bounds.Y+newStartPos.Value.Y;
         ForegroundWindowUtil.ResizeGlobalWindow(
           ForegroundHandle,

@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows.Forms.VisualStyles;
+using System.Windows;
 
 
 namespace net.codingpanda.app.fenestra.utils {
@@ -70,7 +70,6 @@ namespace net.codingpanda.app.fenestra.utils {
     [Flags]
     private enum WindowFlags {
       NoZOrder = 0X4,
-      ShowWindow = 0x0040
     }
 
 
@@ -78,7 +77,7 @@ namespace net.codingpanda.app.fenestra.utils {
     public static extern IntPtr SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int x, int y, int cx, int cy, int wFlags);
 
     private enum ShowWindowCommands {
-      SW_RESTORE=9,
+      SwRestore=9,
     }
 
     [DllImport("user32.dll")]
@@ -86,7 +85,7 @@ namespace net.codingpanda.app.fenestra.utils {
     private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
     public static void ResizeGlobalWindow(IntPtr handle, int left, int top, int width, int height) {
-      ShowWindow(handle, (int)ShowWindowCommands.SW_RESTORE);
+      ShowWindow(handle, (int)ShowWindowCommands.SwRestore);
       SetWindowPos(handle, 0, left, top, width, height, (int)(WindowFlags.NoZOrder));
     }
 
@@ -142,6 +141,32 @@ namespace net.codingpanda.app.fenestra.utils {
 
     public static bool IsHandleOwnedByFenestraProcess(uint fenestraProcessId, IntPtr handle) {
       return fenestraProcessId==GetWindowThreadProcessId(handle);
+    }
+
+
+    public enum DwmWindowAttribute {
+      ExtendedFrameBounds=9,
+    }
+
+
+    [DllImport(@"dwmapi.dll")]
+    private static extern int DwmGetWindowAttribute(IntPtr hwnd, int dwAttribute, out Rect pvAttribute, int cbAttribute);
+
+    [DllImport(@"user32.dll")]
+    [return : MarshalAs(UnmanagedType.Bool)]
+    private static extern bool GetWindowRect(IntPtr hWnd, out Rect lpRect);
+
+
+    public static bool GetHiddenBorder(IntPtr handle) {
+      Rect rect1;
+      if(DwmGetWindowAttribute(handle, (int)DwmWindowAttribute.ExtendedFrameBounds,
+        out rect1, Marshal.SizeOf(typeof(Rect)))>=0) {
+        Rect rect2;
+        if(GetWindowRect(handle, out rect2)) {
+          return !rect1.Equals(rect2);
+        }
+      }
+      return true;
     }
   }
 }
