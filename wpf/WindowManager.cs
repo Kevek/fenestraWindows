@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
+using net.codingpanda.app.fenestra.utils;
 
 
 namespace net.codingpanda.app.fenestra.wpf {
@@ -45,6 +46,7 @@ namespace net.codingpanda.app.fenestra.wpf {
   }
 
   public class WindowManager {
+    public Window MainWindow { get; set; }
     private Dictionary<object, Window> KeyToWindow { get; } = new Dictionary<object, Window>();
 
     public IEnumerable<object> GetWindowKeys() {
@@ -103,7 +105,10 @@ namespace net.codingpanda.app.fenestra.wpf {
     }
 
     public void CloseAllSelectionWindows() {
-      foreach(var key in KeyToWindow.Keys.OfType<FenestraResizeSelectionViewModel>().ToArray()) {
+      GlobalHotkeyUtil.RemoveEscHotkey(MainWindow);
+      foreach(var key in KeyToWindow.Keys
+        .OfType<FenestraResizeSelectionViewModel>()
+        .ToArray()) {
         CloseWindow(key);
       }
     }

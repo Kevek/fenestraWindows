@@ -20,7 +20,9 @@ namespace net.codingpanda.app.fenestra {
 
     public void Init() {
       mainWindow=WindowManager.GetWindow(this);
-      var fenestraProcessId=ForegroundWindowUtil.GetWindowThreadProcessId(new WindowInteropHelper(mainWindow).EnsureHandle());
+      WindowManager.MainWindow=mainWindow;
+      var fenestraProcessId=
+        ForegroundWindowUtil.GetWindowThreadProcessId(new WindowInteropHelper(mainWindow).EnsureHandle());
 
       FenestraNotifyIconUtil.CreateNotifyIcon(() => {
         GlobalHotkeyUtil.RemoveHotkey(mainWindow);
@@ -51,6 +53,7 @@ namespace net.codingpanda.app.fenestra {
           vm.LoadForegroundWindowInfo(newForegroundWindowHandle);
           WindowManager.CreateCenteredWindow(vm, screen);
         }
+        GlobalHotkeyUtil.SetupEscHotkey(mainWindow);
       };
       GlobalHotkeyUtil.OnEscapePressed+=() => { WindowManager.CloseAllSelectionWindows(); };
 

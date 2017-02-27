@@ -32,10 +32,20 @@ namespace net.codingpanda.app.fenestra.utils {
       RegisterHotKey(parentWindow, keys.ModifierKeys, keys.HotKey);
     }
 
+    public static void SetupEscHotkey(Window parentWindow) {
+      var hWnd=new WindowInteropHelper(parentWindow).EnsureHandle();
+      RegisterHotKey(hWnd, EscapeHotkeyId, 0, (uint)KeyInterop.VirtualKeyFromKey(Key.Escape));
+    }
+
     public static void RemoveHotkey(Window parentWindow) {
       HwndSource.RemoveHook(HwndHook);
       HwndSource=null;
       UnregisterHotKey(parentWindow);
+    }
+
+    public static void RemoveEscHotkey(Window parentWindow) {
+      var hWnd=new WindowInteropHelper(parentWindow).EnsureHandle();
+      UnregisterHotKey(hWnd, EscapeHotkeyId);
     }
 
     private static void RegisterHotKey(Window parentWindow, IEnumerable<Key> modifierKeys, Key hotKey) {
@@ -59,13 +69,11 @@ namespace net.codingpanda.app.fenestra.utils {
       }
 
       RegisterHotKey(hWnd, HotkeyId, modifierKeyInt, (uint)KeyInterop.VirtualKeyFromKey(hotKey));
-      RegisterHotKey(hWnd, EscapeHotkeyId, 0, (uint)KeyInterop.VirtualKeyFromKey(Key.Escape));
     }
 
     private static void UnregisterHotKey(Window parentWindow) {
-      var helper=new WindowInteropHelper(parentWindow);
-      UnregisterHotKey(helper.Handle, HotkeyId);
-      UnregisterHotKey(helper.Handle, EscapeHotkeyId);
+      var hWnd=new WindowInteropHelper(parentWindow).EnsureHandle();
+      UnregisterHotKey(hWnd, HotkeyId);
     }
 
     private static IntPtr HwndHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled) {
