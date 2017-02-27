@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 
 
@@ -8,10 +12,16 @@ namespace net.codingpanda.app.fenestra.utils {
   public static class FenestraSettingsUtil {
     private const string SettingsFileName="settings.json";
     private const string SettingsPath="AppSettings\\Local\\Fenestra";
+    private const string StartAtLoginRegistryKey="SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
+    private const string FenestraRegistryKeyName="Fenestra";
 
     private static string GetFenestraSettingsPath() {
       var homePath=Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
       return Path.Combine(homePath, SettingsPath);
+    }
+
+    private static RegistryKey GetStartAtLoginRegistryKey() {
+      return Registry.CurrentUser.OpenSubKey(StartAtLoginRegistryKey, true);
     }
 
     public static void SaveSettings(FenestraSettingsArgs settingsArgs) {
@@ -39,6 +49,19 @@ namespace net.codingpanda.app.fenestra.utils {
         }
       } catch(Exception) {
         return FenestraSettingsArgs.CreateDefault();
+      }
+    }
+
+    public static void ApplySettings(FenestraSettingsArgs args, Window mainWindow) {
+      GlobalHotkeyUtil.SetupHotkey(mainWindow, args.HotKeys);
+      var registryKey=GetStartAtLoginRegistryKey();
+      if(args.StartAtLogin) {
+        var applicationPath=Assembly.GetEntryAssembly().Location;
+        if(applicationPath!=null) {
+          registryKey.SetValue(FenestraRegistryKeyName, applicationPath);
+        }
+      } else {
+        registryKey.DeleteValue(FenestraRegistryKeyName, false);
       }
     }
   }

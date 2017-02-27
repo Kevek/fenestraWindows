@@ -39,16 +39,15 @@
                  HorizontalContentAlignment="Right"
                  Text="{Binding Columns}" />
 
-        <!-- TODO: Not implemented yet -->
         <TextBlock Grid.Row="2"
                    Grid.Column="0"
                    Text="Start At Login:"
-                   Visibility="Collapsed"/>
+                   Visibility="Visible"/>
         <CheckBox Grid.Row="2"
                   Grid.Column="1"
                   HorizontalAlignment="Right"
                   VerticalAlignment="Center"
-                  Visibility="Collapsed"
+                  Visibility="Visible"
                   IsChecked="{Binding StartAtLogin}" />
 
         <TextBlock Grid.Row="3"

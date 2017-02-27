@@ -9,6 +9,7 @@ using net.codingpanda.app.fenestra.wpf;
 namespace net.codingpanda.app.fenestra {
   public class FenestraViewModel : NotifyPropertyChangedBase {
     private ForegroundWindowUtil.ForegroundWindowEventInfo windowEventInfo;
+
     private WindowManager WindowManager { get; }
 
     private Window mainWindow;
@@ -29,12 +30,12 @@ namespace net.codingpanda.app.fenestra {
         var settingsWindow=WindowManager.CreateWindow(settingsViewModel, windowArgs);
         settingsWindow.Closing+=(s, e) => {
           var newArgs=FenestraSettingsUtil.LoadSettings();
-          GlobalHotkeyUtil.SetupHotkey(mainWindow, newArgs.HotKeys);
+          FenestraSettingsUtil.ApplySettings(newArgs, mainWindow);
         };
         settingsViewModel.SettingsSaved+=() => {
           WindowManager.CloseWindow(settingsViewModel);
           var newArgs=FenestraSettingsUtil.LoadSettings();
-          GlobalHotkeyUtil.SetupHotkey(mainWindow, newArgs.HotKeys);
+          FenestraSettingsUtil.ApplySettings(newArgs, mainWindow);
         };
       });
 
@@ -51,9 +52,7 @@ namespace net.codingpanda.app.fenestra {
           WindowManager.CreateCenteredWindow(vm, screen);
         }
       };
-      GlobalHotkeyUtil.OnEscapePressed+=() => {
-        WindowManager.CloseAllSelectionWindows();
-      };
+      GlobalHotkeyUtil.OnEscapePressed+=() => { WindowManager.CloseAllSelectionWindows(); };
 
       windowEventInfo=ForegroundWindowUtil.AddHookToForegroundWindowEvent(() => {
         var newForegroundWindowHandle=ForegroundWindowUtil.GetForegroundWindowHandle();
@@ -68,10 +67,7 @@ namespace net.codingpanda.app.fenestra {
     }
 
     public void LoadFenestraSettings() {
-      var args=FenestraSettingsUtil.LoadSettings();
-      GlobalHotkeyUtil.SetupHotkey(mainWindow, args.HotKeys);
-
-      // TODO: Wire up the "start on startup" registry key
+      FenestraSettingsUtil.ApplySettings(FenestraSettingsUtil.LoadSettings(), mainWindow);
     }
   }
 }
