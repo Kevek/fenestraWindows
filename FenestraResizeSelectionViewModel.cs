@@ -78,9 +78,9 @@ namespace net.codingpanda.app.fenestra {
 
     private void InitGrid() {
       var args=Task.Run(() => FenestraSettingsUtil.LoadSettings()).Result;
-      for(var i=0; i<args.Columns; i++) {
+      for(var i=0; i<args.Rows; i++) {
         var newRow=new FenestraSelectionRow();
-        for(var j=0; j<args.Rows; j++) {
+        for(var j=0; j<args.Columns; j++) {
           newRow.Cells.Add(new FenestraSelectionCell());
         }
         Rows.Add(newRow);

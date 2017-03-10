@@ -49,11 +49,15 @@ namespace net.codingpanda.app.fenestra {
           case nameof(Rows):
             if(Rows<2) {
               Rows=2;
+            } else if(Rows>24) {
+              Rows=24;
             }
             break;
           case nameof(Columns):
             if(Columns<2) {
               Columns=2;
+            } else if(Columns>24) {
+              Columns=24;
             }
             break;
         }
