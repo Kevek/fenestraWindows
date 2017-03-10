@@ -111,7 +111,7 @@ namespace net.codingpanda.app.fenestra {
       }
       var hasHiddenBorder=ForegroundWindowUtil.GetHiddenBorder(ForegroundHandle);
       var hiddenBorder=hasHiddenBorder
-        ? 7
+        ? 8
         : 0;
       if(newStartPos.HasValue) {
         var width=newEndPos.Value.X-newStartPos.Value.X+(2*hiddenBorder);
