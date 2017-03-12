@@ -51,7 +51,8 @@ namespace net.codingpanda.app.fenestra {
         foreach(var screen in Screen.AllScreens) {
           var vm=new FenestraResizeSelectionViewModel(screen, WindowManager);
           vm.LoadForegroundWindowInfo(newForegroundWindowHandle);
-          WindowManager.CreateCenteredWindow(vm, screen);
+          var newWindow=WindowManager.CreateCenteredWindow(vm, screen);
+          FenestraWindowUtil.HideWindowFromAltTab(new WindowInteropHelper(newWindow).EnsureHandle());
         }
         FenestraHotkeyUtil.SetupEscHotkey(mainWindow);
       };

@@ -168,5 +168,66 @@ namespace net.codingpanda.app.fenestra.utils {
       }
       return true;
     }
+
+    // Hide Windows from Alt-Tab from http://stackoverflow.com/a/551847/921904
+    public static void HideWindowFromAltTab(IntPtr handle) {
+      var extantStyle=(int)GetWindowLong(handle, (int)GetWindowLongFields.GwlExstyle);
+      var newStyle=extantStyle|(int)ExtendedWindowStyles.WsExToolwindow;
+      SetWindowLong(handle, (int)GetWindowLongFields.GwlExstyle, (IntPtr)newStyle);
+    }
+
+    [DllImport("user32.dll", EntryPoint="SetWindowLongPtr", SetLastError=true)]
+    private static extern IntPtr IntSetWindowLongPtr(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
+
+
+    [DllImport("user32.dll", EntryPoint="SetWindowLong", SetLastError=true)]
+    private static extern Int32 IntSetWindowLong(IntPtr hWnd, int nIndex, Int32 dwNewLong);
+
+    [DllImport("kernel32.dll", EntryPoint="SetLastError")]
+    public static extern void SetLastError(int dwErrorCode);
+
+
+    [Flags]
+    public enum ExtendedWindowStyles {
+      WsExToolwindow = 0x00000080,
+    }
+
+
+    public enum GetWindowLongFields {
+      GwlExstyle = -20,
+    }
+
+
+    [DllImport("user32.dll")]
+    public static extern IntPtr GetWindowLong(IntPtr hWnd, int nIndex);
+
+
+    public static IntPtr SetWindowLong(IntPtr hWnd, int nIndex, IntPtr dwNewLong) {
+      int error;
+      IntPtr result;
+      // Clear any errors
+      SetLastError(0);
+
+      if(IntPtr.Size==4) {
+        // use SetWindowLong
+        var tempResult=IntSetWindowLong(hWnd, nIndex, IntPtrToInt32(dwNewLong));
+        error=Marshal.GetLastWin32Error();
+        result=new IntPtr(tempResult);
+      } else {
+        // use SetWindowLongPtr
+        result=IntSetWindowLongPtr(hWnd, nIndex, dwNewLong);
+        error=Marshal.GetLastWin32Error();
+      }
+
+      if((result==IntPtr.Zero) && (error!=0)) {
+        throw new System.ComponentModel.Win32Exception(error);
+      }
+      return result;
+    }
+
+
+    private static int IntPtrToInt32(IntPtr intPtr) {
+      return unchecked((int)intPtr.ToInt64());
+    }
   }
 }

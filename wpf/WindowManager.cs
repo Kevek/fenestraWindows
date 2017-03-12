@@ -14,6 +14,7 @@ namespace net.codingpanda.app.fenestra.wpf {
     public WindowStyle WindowStyle { get; set; }
     public double Opacity { get; set; }
     public bool Topmost { get; set; }
+    public bool ShowInTaskbar { get; set; }
 
     public WindowManagerWindowArgs() {
       WindowStartupLocation=WindowStartupLocation.Manual;
@@ -22,16 +23,18 @@ namespace net.codingpanda.app.fenestra.wpf {
       WindowStyle=WindowStyle.None;
       Opacity=1;
       Topmost=true;
+      ShowInTaskbar=true;
     }
 
     public WindowManagerWindowArgs(WindowStartupLocation windowStartupLocation, SizeToContent sizeToContent,
-      bool allowTransparency, WindowStyle windowStyle, double opacity, bool topmost) {
+      bool allowTransparency, WindowStyle windowStyle, double opacity, bool topmost, bool showInTaskbar) {
       WindowStartupLocation=windowStartupLocation;
       SizeToContent=sizeToContent;
       AllowTransparency=allowTransparency;
       WindowStyle=windowStyle;
       Opacity=opacity;
       Topmost=topmost;
+      ShowInTaskbar=showInTaskbar;
     }
 
     public static WindowManagerWindowArgs CreateDefault() {
@@ -39,11 +42,13 @@ namespace net.codingpanda.app.fenestra.wpf {
         WindowStartupLocation.CenterScreen,
         SizeToContent.WidthAndHeight,
         false,
-        WindowStyle.SingleBorderWindow, 
+        WindowStyle.SingleBorderWindow,
         1.0,
-        false);
+        false,
+        true);
     }
   }
+
 
   public class WindowManager {
     public Window MainWindow { get; set; }
@@ -64,6 +69,7 @@ namespace net.codingpanda.app.fenestra.wpf {
         Opacity=args1.Opacity,
         Topmost=args1.Topmost,
         Background=Brushes.Transparent,
+        ShowInTaskbar=args1.ShowInTaskbar,
       };
       KeyToWindow.Add(key, newWindow);
       return newWindow;
@@ -82,7 +88,8 @@ namespace net.codingpanda.app.fenestra.wpf {
         true,
         WindowStyle.None,
         1,
-        true);
+        true,
+        false);
       var newWindow=CreateWindowBase(key, args);
       newWindow.Show();
       newWindow.Left=screen.Bounds.Left+screen.Bounds.Width/2-newWindow.Width/2;
