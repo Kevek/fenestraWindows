@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using net.codingpanda.app.fenestra.utils;
 using net.codingpanda.app.fenestra.wpf;
@@ -72,7 +73,11 @@ namespace net.codingpanda.app.fenestra {
         ForegroundWindowIcon=System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
           iconBitmap.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
       } else {
-        ForegroundWindowIcon=new BitmapImage(new Uri("resources/unknown_icon.png", UriKind.Relative));
+        ForegroundWindowIcon=Imaging.CreateBitmapSourceFromHBitmap(
+          Properties.Resources.unknown_icon.GetHbitmap(),
+          IntPtr.Zero,
+          Int32Rect.Empty,
+          BitmapSizeOptions.FromEmptyOptions());
       }
     }
 
