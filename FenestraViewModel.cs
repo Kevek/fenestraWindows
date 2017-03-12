@@ -8,7 +8,7 @@ using net.codingpanda.app.fenestra.wpf;
 
 namespace net.codingpanda.app.fenestra {
   public class FenestraViewModel : NotifyPropertyChangedBase {
-    private ForegroundWindowUtil.ForegroundWindowEventInfo windowEventInfo;
+    private FenestraWindowUtil.ForegroundWindowEventInfo windowEventInfo;
 
     private WindowManager WindowManager { get; }
 
@@ -22,10 +22,10 @@ namespace net.codingpanda.app.fenestra {
       mainWindow=WindowManager.GetWindow(this);
       WindowManager.MainWindow=mainWindow;
       var fenestraProcessId=
-        ForegroundWindowUtil.GetWindowThreadProcessId(new WindowInteropHelper(mainWindow).EnsureHandle());
+        FenestraWindowUtil.GetWindowThreadProcessId(new WindowInteropHelper(mainWindow).EnsureHandle());
 
       FenestraNotifyIconUtil.CreateNotifyIcon(() => {
-        GlobalHotkeyUtil.RemoveHotkey(mainWindow);
+        FenestraHotkeyUtil.RemoveHotkey(mainWindow);
         var windowArgs=WindowManagerWindowArgs.CreateDefault();
         windowArgs.Topmost=false;
         var settingsViewModel=new FenestraSettingsViewModel();
@@ -42,10 +42,10 @@ namespace net.codingpanda.app.fenestra {
       });
 
       LoadFenestraSettings();
-      GlobalHotkeyUtil.OnHotkeyPressed+=() => {
+      FenestraHotkeyUtil.OnHotkeyPressed+=() => {
         WindowManager.CloseAllSelectionWindows();
-        var newForegroundWindowHandle=ForegroundWindowUtil.GetForegroundWindowHandle();
-        if(ForegroundWindowUtil.IsHandleOwnedByFenestraProcess(fenestraProcessId, newForegroundWindowHandle)) {
+        var newForegroundWindowHandle=FenestraWindowUtil.GetForegroundWindowHandle();
+        if(FenestraWindowUtil.IsHandleOwnedByFenestraProcess(fenestraProcessId, newForegroundWindowHandle)) {
           return;
         }
         foreach(var screen in Screen.AllScreens) {
@@ -53,13 +53,13 @@ namespace net.codingpanda.app.fenestra {
           vm.LoadForegroundWindowInfo(newForegroundWindowHandle);
           WindowManager.CreateCenteredWindow(vm, screen);
         }
-        GlobalHotkeyUtil.SetupEscHotkey(mainWindow);
+        FenestraHotkeyUtil.SetupEscHotkey(mainWindow);
       };
-      GlobalHotkeyUtil.OnEscapePressed+=() => { WindowManager.CloseAllSelectionWindows(); };
+      FenestraHotkeyUtil.OnEscapePressed+=() => { WindowManager.CloseAllSelectionWindows(); };
 
-      windowEventInfo=ForegroundWindowUtil.AddHookToForegroundWindowEvent(() => {
-        var newForegroundWindowHandle=ForegroundWindowUtil.GetForegroundWindowHandle();
-        if(ForegroundWindowUtil.IsHandleOwnedByFenestraProcess(fenestraProcessId, newForegroundWindowHandle)) {
+      windowEventInfo=FenestraWindowUtil.AddHookToForegroundWindowEvent(() => {
+        var newForegroundWindowHandle=FenestraWindowUtil.GetForegroundWindowHandle();
+        if(FenestraWindowUtil.IsHandleOwnedByFenestraProcess(fenestraProcessId, newForegroundWindowHandle)) {
           return;
         }
         var selectionViewModels=WindowManager.GetWindowKeys().OfType<FenestraResizeSelectionViewModel>().ToArray();

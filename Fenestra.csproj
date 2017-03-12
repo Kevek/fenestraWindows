@@ -72,8 +72,8 @@
     </Compile>
     <Compile Include="FenestraSettingsViewModel.cs" />
     <Compile Include="utils\FenestraSettingsUtil.cs" />
-    <Compile Include="utils\ForegroundWindowUtil.cs" />
-    <Compile Include="utils\GlobalHotkeyUtil.cs" />
+    <Compile Include="utils\FenestraWindowUtil.cs" />
+    <Compile Include="utils\FenestraHotkeyUtil.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="FenestraResizeSelectionView.xaml.cs">
       <DependentUpon>FenestraResizeSelectionView.xaml</DependentUpon>
@@ -87,8 +87,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="utils\KeysUtil.cs" />
-    <Compile Include="utils\RectUtil.cs" />
+    <Compile Include="utils\FenestraRectUtil.cs" />
     <Compile Include="wpf\CommandImpl.cs" />
     <Compile Include="wpf\NotifyPropertyChangedBase.cs" />
     <Compile Include="wpf\WindowManager.cs" />

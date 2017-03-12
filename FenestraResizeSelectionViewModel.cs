@@ -64,9 +64,9 @@ namespace net.codingpanda.app.fenestra {
 
     public void LoadForegroundWindowInfo(IntPtr newForegroundHandle) {
       ForegroundHandle=newForegroundHandle;
-      ForegroundWindowHeader=ForegroundWindowUtil.GetForegroundWindowHeader(ForegroundHandle) ??
+      ForegroundWindowHeader=FenestraWindowUtil.GetForegroundWindowHeader(ForegroundHandle) ??
                              "Fenestra unable to load window name";
-      var windowIconImage=ForegroundWindowUtil.GetForegroundWindowIcon(ForegroundHandle);
+      var windowIconImage=FenestraWindowUtil.GetForegroundWindowIcon(ForegroundHandle);
       if(windowIconImage!=null) {
         var iconBitmap=new Bitmap(windowIconImage);
         ForegroundWindowIcon=System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
@@ -109,7 +109,7 @@ namespace net.codingpanda.app.fenestra {
           }
         }
       }
-      var hasHiddenBorder=ForegroundWindowUtil.GetHiddenBorder(ForegroundHandle);
+      var hasHiddenBorder=FenestraWindowUtil.GetHiddenBorder(ForegroundHandle);
       var hiddenBorder=hasHiddenBorder
         ? 8
         : 0;
@@ -118,7 +118,7 @@ namespace net.codingpanda.app.fenestra {
         var height=newEndPos.Value.Y-newStartPos.Value.Y+hiddenBorder;
         var screenX=Screen.Bounds.X+newStartPos.Value.X-hiddenBorder;
         var screenY=Screen.Bounds.Y+newStartPos.Value.Y;
-        ForegroundWindowUtil.ResizeGlobalWindow(
+        FenestraWindowUtil.ResizeGlobalWindow(
           ForegroundHandle,
           screenX, screenY,
           width, height);

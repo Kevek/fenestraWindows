@@ -105,7 +105,7 @@ namespace net.codingpanda.app.fenestra.wpf {
     }
 
     public void CloseAllSelectionWindows() {
-      GlobalHotkeyUtil.RemoveEscHotkey(MainWindow);
+      FenestraHotkeyUtil.RemoveEscHotkey(MainWindow);
       foreach(var key in KeyToWindow.Keys
         .OfType<FenestraResizeSelectionViewModel>()
         .ToArray()) {

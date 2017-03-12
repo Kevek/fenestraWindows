@@ -2,7 +2,7 @@
 
 
 namespace net.codingpanda.app.fenestra.utils {
-  public static class RectUtil {
+  public static class FenestraRectUtil {
     public static bool Intersects(this Rect one, Rect two) {
       return !one.IsEmpty &&
              !two.IsEmpty && 

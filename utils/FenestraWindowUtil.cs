@@ -6,7 +6,7 @@ using System.Windows;
 
 
 namespace net.codingpanda.app.fenestra.utils {
-  public static class ForegroundWindowUtil {
+  public static class FenestraWindowUtil {
     [DllImport("user32.dll")]
     private static extern IntPtr GetForegroundWindow();
 

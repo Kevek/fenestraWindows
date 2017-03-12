@@ -53,7 +53,7 @@ namespace net.codingpanda.app.fenestra.utils {
     }
 
     public static void ApplySettings(FenestraSettingsArgs args, Window mainWindow) {
-      GlobalHotkeyUtil.SetupHotkey(mainWindow, args.HotKeys);
+      FenestraHotkeyUtil.SetupHotkey(mainWindow, args.HotKeys);
       var registryKey=GetStartAtLoginRegistryKey();
       if(args.StartAtLogin) {
         var applicationPath=Assembly.GetEntryAssembly().Location;
