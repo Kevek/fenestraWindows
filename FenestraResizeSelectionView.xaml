@@ -44,8 +44,9 @@
                        Source="{Binding ForegroundWindowIcon}" />
                 <TextBlock Text="{Binding ForegroundWindowHeader}"
                            MaxWidth="360"
-                           TextWrapping="Wrap"
-                           VerticalAlignment="Center" />
+                           TextTrimming="WordEllipsis"
+                           VerticalAlignment="Center"
+                           ToolTip="{Binding ForegroundWindowHeader}"/>
             </StackPanel>
 
             <Grid x:Name="selectionGrid"
