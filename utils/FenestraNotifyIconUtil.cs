@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Drawing;
-using System.IO;
-using System.Reflection;
-using System.Windows.Controls;
 using System.Windows.Forms;
 
 
@@ -16,12 +12,12 @@ namespace net.codingpanda.app.fenestra.utils {
         Visible=true
       };
       var settingsMenuItem=new ToolStripMenuItem {
-        Text="Settings"
+        Text=@"Settings"
       };
       settingsMenuItem.Click+=(s, e) => openSettings();
 
       var exitMenuItem=new ToolStripMenuItem() {
-        Text="Exit"
+        Text=@"Exit"
       };
       exitMenuItem.Click+=(s, e) => {
         notifyIcon.Visible=false;

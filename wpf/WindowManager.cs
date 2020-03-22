@@ -14,7 +14,7 @@ namespace net.codingpanda.app.fenestra.wpf {
     public WindowStyle WindowStyle { get; set; }
     public double Opacity { get; set; }
     public bool Topmost { get; set; }
-    public bool ShowInTaskbar { get; set; }
+    public bool ShowInTaskBar { get; set; }
 
     public WindowManagerWindowArgs() {
       WindowStartupLocation=WindowStartupLocation.Manual;
@@ -23,18 +23,18 @@ namespace net.codingpanda.app.fenestra.wpf {
       WindowStyle=WindowStyle.None;
       Opacity=1;
       Topmost=true;
-      ShowInTaskbar=true;
+      ShowInTaskBar=true;
     }
 
     public WindowManagerWindowArgs(WindowStartupLocation windowStartupLocation, SizeToContent sizeToContent,
-      bool allowTransparency, WindowStyle windowStyle, double opacity, bool topmost, bool showInTaskbar) {
+      bool allowTransparency, WindowStyle windowStyle, double opacity, bool topmost, bool showInTaskBar) {
       WindowStartupLocation=windowStartupLocation;
       SizeToContent=sizeToContent;
       AllowTransparency=allowTransparency;
       WindowStyle=windowStyle;
       Opacity=opacity;
       Topmost=topmost;
-      ShowInTaskbar=showInTaskbar;
+      ShowInTaskBar=showInTaskBar;
     }
 
     public static WindowManagerWindowArgs CreateDefault() {
@@ -69,7 +69,7 @@ namespace net.codingpanda.app.fenestra.wpf {
         Opacity=args1.Opacity,
         Topmost=args1.Topmost,
         Background=Brushes.Transparent,
-        ShowInTaskbar=args1.ShowInTaskbar,
+        ShowInTaskbar=args1.ShowInTaskBar,
       };
       KeyToWindow.Add(key, newWindow);
       return newWindow;
@@ -104,8 +104,7 @@ namespace net.codingpanda.app.fenestra.wpf {
     }
 
     public void CloseWindow(object key) {
-      Window window;
-      if(KeyToWindow.TryGetValue(key, out window)) {
+      if(KeyToWindow.TryGetValue(key, out var window)) {
         KeyToWindow.Remove(key);
         window.Close();
       }

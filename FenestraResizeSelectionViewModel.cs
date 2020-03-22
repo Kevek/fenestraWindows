@@ -18,8 +18,8 @@ namespace net.codingpanda.app.fenestra {
     private bool selected;
 
     public bool Selected {
-      get { return selected; }
-      set { SetValue(ref selected, value); }
+      get => selected;
+      set => SetValue(ref selected, value);
     }
   }
 
@@ -38,15 +38,15 @@ namespace net.codingpanda.app.fenestra {
     private string foregroundWindowHeader;
 
     public string ForegroundWindowHeader {
-      get { return foregroundWindowHeader; }
-      set { SetValue(ref foregroundWindowHeader, value); }
+      get => foregroundWindowHeader;
+      set => SetValue(ref foregroundWindowHeader, value);
     }
 
     private BitmapSource foregroundWindowIcon;
 
     public BitmapSource ForegroundWindowIcon {
-      get { return foregroundWindowIcon; }
-      set { SetValue(ref foregroundWindowIcon, value); }
+      get => foregroundWindowIcon;
+      set => SetValue(ref foregroundWindowIcon, value);
     }
 
     public ObservableCollection<FenestraSelectionRow> Rows { get; } =
@@ -70,7 +70,7 @@ namespace net.codingpanda.app.fenestra {
       var windowIconImage=FenestraWindowUtil.GetForegroundWindowIcon(ForegroundHandle);
       if(windowIconImage!=null) {
         var iconBitmap=new Bitmap(windowIconImage);
-        ForegroundWindowIcon=System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+        ForegroundWindowIcon=Imaging.CreateBitmapSourceFromHBitmap(
           iconBitmap.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
       } else {
         ForegroundWindowIcon=Imaging.CreateBitmapSourceFromHBitmap(
@@ -82,7 +82,7 @@ namespace net.codingpanda.app.fenestra {
     }
 
     private void InitGrid() {
-      var args=Task.Run(() => FenestraSettingsUtil.LoadSettings()).Result;
+      var args=Task.Run(FenestraSettingsUtil.LoadSettings).Result;
       for(var i=0; i<args.Rows; i++) {
         var newRow=new FenestraSelectionRow();
         for(var j=0; j<args.Columns; j++) {

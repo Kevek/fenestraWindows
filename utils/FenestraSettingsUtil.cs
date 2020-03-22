@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Win32;
 using Newtonsoft.Json;
@@ -11,8 +9,8 @@ using Newtonsoft.Json;
 namespace net.codingpanda.app.fenestra.utils {
   public static class FenestraSettingsUtil {
     private const string SettingsFileName="settings.json";
-    private const string SettingsPath="AppSettings\\Local\\Fenestra";
-    private const string StartAtLoginRegistryKey="SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
+    private const string SettingsPath=@"AppSettings\Local\Fenestra";
+    private const string StartAtLoginRegistryKey=@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
     private const string FenestraRegistryKeyName="Fenestra";
 
     private static string GetFenestraSettingsPath() {
@@ -30,11 +28,11 @@ namespace net.codingpanda.app.fenestra.utils {
         Directory.CreateDirectory(path);
       }
       var filePath=Path.Combine(GetFenestraSettingsPath(), SettingsFileName);
-      using(var sw=new StreamWriter(new FileStream(filePath, FileMode.Create))) {
-        var settingsJson=JsonConvert.SerializeObject(settingsArgs);
-        sw.Write(settingsJson);
-        sw.Flush();
-      }
+
+      using var sw=new StreamWriter(new FileStream(filePath, FileMode.Create));
+      var settingsJson=JsonConvert.SerializeObject(settingsArgs);
+      sw.Write(settingsJson);
+      sw.Flush();
     }
 
     public static FenestraSettingsArgs LoadSettings() {
@@ -43,10 +41,9 @@ namespace net.codingpanda.app.fenestra.utils {
         return FenestraSettingsArgs.CreateDefault();
       }
       try {
-        using(var sr=new StreamReader(new FileStream(filePath, FileMode.Open))) {
-          var settingsJson=sr.ReadToEnd();
-          return JsonConvert.DeserializeObject<FenestraSettingsArgs>(settingsJson);
-        }
+        using var sr=new StreamReader(new FileStream(filePath, FileMode.Open));
+        var settingsJson=sr.ReadToEnd();
+        return JsonConvert.DeserializeObject<FenestraSettingsArgs>(settingsJson);
       } catch(Exception) {
         return FenestraSettingsArgs.CreateDefault();
       }
@@ -56,7 +53,7 @@ namespace net.codingpanda.app.fenestra.utils {
       FenestraHotkeyUtil.SetupHotkey(mainWindow, args.HotKeys);
       var registryKey=GetStartAtLoginRegistryKey();
       if(args.StartAtLogin) {
-        var applicationPath=Assembly.GetEntryAssembly().Location;
+        var applicationPath=Assembly.GetEntryAssembly()?.Location;
         if(applicationPath!=null) {
           registryKey.SetValue(FenestraRegistryKeyName, applicationPath);
         }

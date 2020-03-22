@@ -12,22 +12,22 @@ namespace net.codingpanda.app.fenestra {
     private int rows;
 
     public int Rows {
-      get { return rows; }
-      set { SetValue(ref rows, value); }
+      get => rows;
+      set => SetValue(ref rows, value);
     }
 
     private int columns;
 
     public int Columns {
-      get { return columns; }
-      set { SetValue(ref columns, value); }
+      get => columns;
+      set => SetValue(ref columns, value);
     }
 
     private bool startAtLogin;
 
     public bool StartAtLogin {
-      get { return startAtLogin; }
-      set { SetValue(ref startAtLogin, value); }
+      get => startAtLogin;
+      set => SetValue(ref startAtLogin, value);
     }
 
     public ObservableCollection<Key> HotKeys { get; } = new ObservableCollection<Key>();
@@ -35,8 +35,8 @@ namespace net.codingpanda.app.fenestra {
     private string hotKeysDisplay;
 
     public string HotKeyDisplay {
-      get { return hotKeysDisplay; }
-      set { SetValue(ref hotKeysDisplay, value); }
+      get => hotKeysDisplay;
+      set => SetValue(ref hotKeysDisplay, value);
     }
 
     public ICommand SaveCommand { get; }

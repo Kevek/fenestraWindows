@@ -12,8 +12,7 @@ namespace net.codingpanda.app.fenestra {
     }
 
     private void OnHotKeyDown(object sender, KeyEventArgs e) {
-      var vm=DataContext as FenestraSettingsViewModel;
-      if(vm==null) {
+      if(!(DataContext is FenestraSettingsViewModel vm)) {
         return;
       }
       vm.HotKeys.Clear();

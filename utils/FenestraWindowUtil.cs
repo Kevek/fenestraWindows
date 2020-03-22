@@ -20,10 +20,9 @@ namespace net.codingpanda.app.fenestra.utils {
     public static string GetForegroundWindowHeader(IntPtr handle) {
       const int nChars=256;
       var sb=new StringBuilder(nChars);
-      if(GetWindowText(handle, sb, nChars)>0) {
-        return sb.ToString();
-      }
-      return null;
+      return GetWindowText(handle, sb, nChars)>0 
+        ? sb.ToString() 
+        : null;
     }
 
     [DllImport("user32.dll")]
@@ -38,22 +37,21 @@ namespace net.codingpanda.app.fenestra.utils {
     [DllImport("user32.dll", EntryPoint="GetClassLongPtr")]
     private static extern IntPtr GetClassLong64(IntPtr hWnd, int nIndex);
 
-    private const uint WmGeticon=0x007f;
+    private const uint WmGetIcon=0x007f;
     private static readonly IntPtr IconSmall2=new IntPtr(2);
-    private const int GclHicon=-14;
+    private const int GclHIcon=-14;
 
     private static IntPtr GetClassLongPtr(IntPtr hWnd, int nIndex) {
-      if(IntPtr.Size==4) {
-        return new IntPtr(GetClassLong32(hWnd, nIndex));
-      }
-      return GetClassLong64(hWnd, nIndex);
+      return IntPtr.Size==4 
+        ? new IntPtr(GetClassLong32(hWnd, nIndex))
+        : GetClassLong64(hWnd, nIndex);
     }
 
     public static Image GetForegroundWindowIcon(IntPtr handle) {
       try {
-        var handle1=SendMessage(handle, WmGeticon, IconSmall2, IntPtr.Zero);
+        var handle1=SendMessage(handle, WmGetIcon, IconSmall2, IntPtr.Zero);
         if(handle1==IntPtr.Zero) {
-          handle1=GetClassLongPtr(handle, GclHicon);
+          handle1=GetClassLongPtr(handle, GclHIcon);
         }
         if(handle1==IntPtr.Zero) {
           handle1=LoadIcon(IntPtr.Zero, (IntPtr)0x7F00);
@@ -134,8 +132,7 @@ namespace net.codingpanda.app.fenestra.utils {
     private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
     public static uint GetWindowThreadProcessId(IntPtr handle) {
-      uint handleProcessId;
-      GetWindowThreadProcessId(handle, out handleProcessId);
+      GetWindowThreadProcessId(handle, out var handleProcessId);
       return handleProcessId;
     }
 
@@ -158,11 +155,9 @@ namespace net.codingpanda.app.fenestra.utils {
 
 
     public static bool GetHiddenBorder(IntPtr handle) {
-      Rect rect1;
       if(DwmGetWindowAttribute(handle, (int)DwmWindowAttribute.ExtendedFrameBounds,
-        out rect1, Marshal.SizeOf(typeof(Rect)))>=0) {
-        Rect rect2;
-        if(GetWindowRect(handle, out rect2)) {
+           out var rect1, Marshal.SizeOf(typeof(Rect)))>=0) {
+        if(GetWindowRect(handle, out var rect2)) {
           return !rect1.Equals(rect2);
         }
       }
