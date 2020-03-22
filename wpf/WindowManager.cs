@@ -92,9 +92,16 @@ namespace net.codingpanda.app.fenestra.wpf {
         false);
       var newWindow=CreateWindowBase(key, args);
       newWindow.Show();
-      newWindow.Left=screen.Bounds.Left+screen.Bounds.Width/2-newWindow.Width/2;
-      newWindow.Top=screen.Bounds.Top+screen.Bounds.Height/2-newWindow.Height/2;
+
+      var scale=GetWindowsScale();
+      newWindow.Left=screen.Bounds.Left+screen.Bounds.Width / (2 * scale)-newWindow.Width / 2;
+      newWindow.Top=screen.Bounds.Top+screen.Bounds.Height / (2 * scale)-newWindow.Height / 2;
+
       return newWindow;
+    }
+
+    public static double GetWindowsScale() {
+      return Screen.PrimaryScreen.Bounds.Width / SystemParameters.PrimaryScreenWidth;
     }
 
     public Window CreateHiddenWindow(object key) {
