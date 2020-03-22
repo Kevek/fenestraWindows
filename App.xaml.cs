@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Windows;
 using net.codingpanda.app.fenestra.wpf;
 
@@ -25,13 +24,13 @@ namespace net.codingpanda.app.fenestra {
         var exception=e.ExceptionObject as Exception;
         if(exception!=null) {
           Dispatcher.Invoke(() => {
-              MessageBox.Show(
-                $@"An exception has occurred in Fenestra, it will now close.
+            MessageBox.Show(
+              $@"An exception has occurred in Fenestra, it will now close.
 
 The error message is:
 {exception}",
-                "Fenestra Exception", MessageBoxButton.OK);
-            });
+              "Fenestra Exception", MessageBoxButton.OK);
+          });
           Environment.Exit(-1);
         }
       };
